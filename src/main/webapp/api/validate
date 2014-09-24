@@ -1,0 +1,18 @@
+import groovy.json.*
+
+response.contentType = 'text/plain'
+
+if (headers['content-type'] != 'application/json') {
+	response.sendError(500, "Invalid content-type")
+	return
+}
+
+String input = request.reader.text
+if (input == null) {
+	response.sendError(500, "No input provided."_
+	return
+}
+
+SchemaValidator validator = new SchemaValidator()
+ProcessingReport report = validator.validate(input)
+return report.toString()

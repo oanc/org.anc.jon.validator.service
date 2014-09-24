@@ -1,0 +1,81 @@
+/*
+ * The LAPPS Interchange Format.
+ *
+ * LAPPS web service exchange JSON data conforming to the LAPPS Interchange Format (LIF).
+ * Each LIF object consists of some metadata, a text, and an ordered list of views, where
+ * a view is a collection of annotations and (optionally) some metadata.
+ *
+ */
+
+title "LAPPS Interchange Format"
+description "The JSON-LD objects exchanged by LAPPS web services."
+type object
+properties {
+	'@context' {
+		oneOf([
+			{
+				type object
+				additionalProperties true
+			},
+			{
+				type string
+				format 'uri'
+			}
+		])
+	}
+	'@vocab' {
+		type string
+		format 'uri'
+	}
+    text {
+        type object
+        properties {
+            '@value' { type string }
+            '@language' { type string }
+        }
+        required '@value'
+    }
+    metadata { $ref '#/definitions/map' }
+    views {
+        type array
+        items {
+        	type object
+	        properties {
+    	        metadata { $ref '#/definitions/map' }
+        	    annotations { $ref '#/definitions/annotations' }
+        	}
+        	required 'annotations'
+        }
+    }
+}
+
+/*
+ * Definitions of the object referenced above.
+ */
+definitions {
+    // A HashMap. Used to store metadata at various levels.
+    map {
+        type object
+        additionalProperties true
+    }
+    
+    // An array of annotations.
+    annotations {
+        type array
+        items { $ref '#/definitions/annotation' }
+    }
+    
+    // A single annotation.
+    annotation {
+    	type object
+    	properties {
+			id { type string }
+			label { type string }
+			start { type integer; minimum 0 }
+			end { type integer; minimum 0 }
+			features { $ref '#/definitions/map' }
+			metadata { $ref '#/definitions/map' }
+		}
+        required 'id', 'label'
+    }
+}

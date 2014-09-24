@@ -1,0 +1,49 @@
+/*
+ * A JSON Schema DSL for the metadata objects produced by LAPPS services
+ * to describe themselves.
+ */
+ 
+title "LAPPS Service Metadata"
+description "Metadata about LAPPS services"
+type object
+definitions {
+	encoding {
+		type string
+	}
+	arrayOfStrings {
+		type array
+		items { type string }
+	}
+	// The input/output requirements of the service.
+	io {
+		type object
+		properties {
+			annotations { $ref '#/definitions/arrayOfStrings' }
+			encoding    { $ref '#/definitions/encoding' }
+			format      { $ref '#/definitions/arrayOfStrings'  }
+			language    { $ref '#/definitions/arrayOfStrings' }
+		}
+	}
+}
+
+properties {
+	'@context' {
+		type string
+		format 'uri'
+	}
+	'@vocab' {
+		type string
+		format 'uri'
+	}
+	allow { 
+		type string
+		format 'uri'
+	}	
+	description {  type string }
+	name {  type string }
+	produces { $ref "#/definitions/io" }
+	requires { $ref "#/definitions/io" }
+	vendor { type string }
+	version { type string }
+}
+required "name", "produces", "requires", "version"

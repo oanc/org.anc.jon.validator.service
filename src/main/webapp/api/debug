@@ -1,0 +1,17 @@
+html.html {
+	head {
+		title "Debugger"
+	}
+	body {
+		h1 "Headers"
+		table {
+			headers.each { name, value ->
+				tr {
+					td "$name"
+					td "$value"
+				}
+			}
+		}
+	}
+}
+
